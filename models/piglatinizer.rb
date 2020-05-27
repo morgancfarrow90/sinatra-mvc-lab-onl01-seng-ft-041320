@@ -1,28 +1,24 @@
-require 'pry'
-
 class PigLatinizer
 
-  def piglatinize(word)
-    consonant(word)
-  	if /^[aeiou]/i.match(x)
-	  "#{x}way"
-  	else
-  	parts = word.split(/[aeious].*/)
-  	"#{parts[1]}#{parts[0]}ay"
+  Checker = /\A[^aeiou]+/i
+
+  def piglatinize (phrase)
+    phrase_swapped = phrase.split(" ").map do |word|
+      latinize(word)
     end
-    
+    phrase_swapped.join(" ")
   end
 
-  def consonant(word)
-    word_array = word.split("")
-    beginning_letter = word_array.shift
-    word_array << beginning_letter
+  def latinize(word)
+    answer = ""
+    if(Checker.match(word) == nil)
+      answer = "#{word}way"
+    else
+      length = Checker.match(word).to_s.length
+      attach_to_end =  word.slice(0,length)
+      answer = "#{word.slice(length,word.length - length) + attach_to_end}ay"
+      answer
+    end
   end
 
-  def to_pig_latin(text)
-    words = text.split("")
-    words.map! {|word| piglatinize(word)}
-    words.join(" ")
-  end
-
-end 
+end
